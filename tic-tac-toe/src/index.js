@@ -8,7 +8,8 @@ import './index.css';
 class Square extends React.Component {      //COMPONENT/REACT COMPONENT CLASS
   render() {                                // ^Takes in parameters aka PROPS and returns views via render method
     return (                                // Render returns 'description' of what will be displayed aka a REACT ELEMENT
-      <button className="square">           
+      <button className="square" onClick={() => 
+        alert('click')}>           
         {this.props.value} 
       </button>
     );
