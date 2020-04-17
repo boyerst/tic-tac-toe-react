@@ -2,15 +2,23 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
+//COMPONENT/REACT COMPONENT CLASS (components here: Square, Board, Game)
+// ^Takes in parameters aka PROPS and returns views via render method
+// Render returns 'description' of what will be displayed aka a REACT ELEMENT
 
-
-
-class Square extends React.Component {      //COMPONENT/REACT COMPONENT CLASS
-  render() {                                // ^Takes in parameters aka PROPS and returns views via render method
-    return (                                // Render returns 'description' of what will be displayed aka a REACT ELEMENT
-      <button className="square" onClick={() => 
-        alert('click')}>           
-        {this.props.value} 
+class Square extends React.Component {  
+  constructor(props) {                  //CONSTRUCTOR initializes state
+    super(props);                       //super(): always use to define constructor of child class
+    this.state = {
+      value: null,
+    };
+  }    
+  render() {                                
+    return (                                
+      <button 
+      className="square" 
+      onClick={() => this.setState({value: 'X'})}>           
+        {this.state.value} 
       </button>
     );
   }
