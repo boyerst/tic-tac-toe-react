@@ -28,20 +28,23 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  constructor(props) {                    //CONSTRUCTOR initializes state
-    super(props);                             //super(): always use to define constructor of child class
-    this.state = {
-      squares: Array(9).fill(null),
-      xIsNext: true,
-    };
-  }
+  // constructor(props) {                    //CONSTRUCTOR initializes state
+  //   super(props);                             //super(): always use to define constructor of child class
+  //   this.state = {
+  //     squares: Array(9).fill(null),  // <---lifted state again, from Board to to Game this time
+  //     xIsNext: true,                    //lifted to Game in order for game to collected Data from both children - Square and Board
+  //   };
+  // }
   handleClick(i) {
     const squares = this.state.squares.slice();  //.slice() creates a copy of the squares array to modify when squares are clicked
+    if (calculateWinner(squares) || squares[i]) { // = go no further if winner declared or target already handled
+      return;
+    }
     squares[i] = this.state.xIsNext ? 'X' : 'O';   //Changing the copy allows change of data without mutating original
     this.setState({                                   //This lets us keep previous versions of data to make complex features elsewhere in the game (ie undo/redo historical actions)
       squares: squares ,                                  //Also easier to detect historical changes --> more data to reference
       xIsNext: !this.state.xIsNext,                         //Also allows creating of PURE COMPONENTS and determine if changes occured which helps determine when to re-render
-      });          //'!':used as negation operator for truth tests on a variable            
+      });          //^ '!':used as negation operator for truth tests on a variable            
   }
                                                                
   renderSquare(i) {                                                     
@@ -87,6 +90,15 @@ class Board extends React.Component {
 }
 
 class Game extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      history: [{
+        squares: Array(9).fill(null),
+      }],
+      xIsNext:true,
+    };
+  }
   render() {
     return (
       <div className="game">
