@@ -99,12 +99,12 @@ class Game extends React.Component {
       history: [{
         squares: Array(9).fill(null),
       }],
-      stepNumber: 0,
+      stepNumber: 0, //this reflects the move displayed to the user
       xIsNext:true,
     };
   }
   handleClick(i) {
-    const history = this.state.history;
+    const history = this.state.history.slice(0, this.state.stepNumber + 1);//this throws away "future history" and gives player clean slate when reverted to redo a move
     const current = history[history.length - 1];  //moved handleClick from board + added concatenation of new history entries for array
     const squares = current.squares.slice();      ////.slice() creates a copy of the squares array to modify when squares are clicked
     if(calculateWinner(squares) || squares[i]) {
@@ -115,6 +115,7 @@ class Game extends React.Component {
       history: history.concat([{            //using concat method here because we dont want to mutate the original
         squares: squares,                      //we don't want to mutate the orig so that we can keep track of diff versions of data to add complex features in the game
       }]),
+      stepNumber: history.length,
       xIsNext: !this.state.xIsNext,
     });
   }
@@ -126,7 +127,7 @@ class Game extends React.Component {
   }
   render() {
     const history = this.state.history;
-    const current = history[history.length - 1];
+    const current = history[this.state.stepNumber];
     const winner = calculateWinner(current.squares);
 
     const moves = history.map((step, move) => {         //.map() to 'loop' over history to display it to the player as a list of past moves
